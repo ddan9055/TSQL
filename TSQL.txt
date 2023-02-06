@@ -1,0 +1,222 @@
+
+T/SQL = Transact SQL
+
+>> T/SQL Stands for "Transact Structure Query Language".It is an extension of SQL Language.This is 
+   same as PL/SQL in Oracle.
+
+>> In SQL we can execute single line of statement only where in T/SQL we can execute block of 
+   statements at a time.
+
+>> SQL does not support conditional and looping statement  like if-else and while,for loops.But we 
+   can implement these conditional and looping statements in T/SQL.
+
+>> SQL Language will not provide reusability facilities where as T/SQL language will provide 
+   reusability by defining objects such as Procedures and functions.
+
+>> T/SQL commands can be embedded inside the programs where program is a block of code.
+
+# T/SQL program blocks can be divided into two types.
+	1. Anonymous blocks : anonymous blocks are called as unnamed block of code which is executed
+		at  any point of time and does not store on database.These blocks can be written on 
+		Query window and execute.
+
+	2. Sub-program blocks : Sub program blocks are called as Named block of code which is executed
+		at any point of time and stored on database.These blocks are providing resuability of 
+		code.
+
+
+# Declaring Variables In T/SQL Program
+Syntax : Declare @variableName datatype[Size]...
+
+ex : declare @empId int;
+     declare @ename varchar(20);	
+
+Note  : While declaring variable,we should  be prefixed with @ symbol. 
+
+# Assigning values of Variables : Values can be assigned by using a 'SET' statement
+
+Syntax : Set @VariableName = value
+
+ex : Set @empId = 101;
+     Set @ename = 'Amit';	
+
+# Printing Values of Variables : If we want to print the values we can use the 'PRINT' statement
+Syntax : Print @VariableName
+
+ex : Print @empId;
+
+# Structure of T/SQl Program
+
+Syntax : 
+	Declare @variableName datatype[Size]...
+
+	Set @VariableName = value
+
+	Statements ;
+
+	Print @VariableName
+
+
+Ex1 : Write a T/SQL Program to input two values and interchange the variable values
+
+	declare @a int,@b int,@c int; 
+	
+	set @a = 10;
+	set @b = 20;
+	
+	Print @a;
+	Print @b;
+
+Ex2 :  Write a  T/SQl program to input student id ,name,marks and find the total marks of student
+
+declare @id int,@name varchar(30),@m1 int,@m2 int,@m3 int,@total int;
+Set @id= 101;
+Set @name = 'Amit';
+Set @m1 = 75;
+Set @m2 = 86;
+Set @m3 = 91;
+Set @total = @m1 + @m2 + @m3;
+Print @id;
+Print @name;
+Print @total;
+
+
+Ex 3 : Write a T/SQL Program to perform arithematic opertion.
+
+declare @num1 int,@num2 int,@result int;
+set @num1 = 20;
+set @num2 = 10;
+
+Set @result = @num1 + @num2;
+print @result
+
+
+Conditional Statements : It is a block of code ,which executes based on a condition.
+
+# If-else Statement : In If-else conditional control statement,If block gets executes only
+ when condition is true and statements in else block get executes only when the condition is false
+
+Synatx : 
+	if(condition)
+	{
+	 Statements
+	}
+	else
+	{
+	Statements
+	}
+
+
+Ex 4 : Write a T/SQL Program to find big number from two variables
+ declare @a int,@b int;
+ set @a = 30;
+ set @b = 20;
+ if(@a>@b)
+ {
+ Print 'A is big'
+ }
+ else 
+ {
+ Print 'B is big'
+ }
+
+ Ex 5 : To find +ve and -ve Number
+
+ declare @a int;
+ Set @a = 10;
+ if(@a>0)
+ Print 'A is +ve Number'
+ if(@a = 0)
+  Print 'A is neutral Number'
+ else
+ Print 'A is -ve Number'
+
+Ex 6 : Write a T/SQL program to find number is even or odd
+
+
+Case Function :  The case function if we want to use multiple conditional statements in program and 
+execute only the true condition block or what we input that result
+
+Syntax : 
+
+Selcet case @VariableName
+
+when caseValue then 'display value'
+
+
+when caseValue then 'display value'
+
+when caseValue then 'display value'
+
+end
+
+ex 7 :
+ declare @weekdays int
+ Set @weekdays = 7
+ Select Case @weekdays
+ when 1 Then 'Sunday'
+ when 2 Then 'Monday'
+ when 3 Then 'Tuesday'
+ when 4 Then 'Wednesday'
+ when 5 Then 'Thursday'
+ when 6 Then 'Friday'
+ when 7 Then 'Saturday'
+ end
+
+OR
+
+Syntax : 
+
+Selcet case 
+
+when @VariableName=caseValue then 'display value'
+
+when @VariableName=caseValue then 'display value'
+
+when @VariableName=caseValue then 'display value'
+
+end
+
+
+# While Loop : Sets a condition for repeated execution of an SQL Statement or  statement block.The
+statement block are executed repeatedly as long as the specified condition is true.The execution of 
+statements in while loop can be controlled from outside the loop with BREAK and CONTINUE keys.
+
+Syntax : 
+ WHILE Boolean expression
+ [BIGIN]
+	<SQl statement / block >
+	[BREAK]
+	<SQl statement / block >
+	[CONTINUE]
+	<SQl statement / block >
+ [END]
+
+
+BREAK  : It Causes an exit from the inner most while loop.Any statements that appear after End Keyword,
+marking the end loop,are executed
+
+CONTINUE : It Causes  the While loop ton restart,ignoring any statements after the CONTINUE keyword
+
+
+Ex 8 : Write a T/SQL program to print value fron 1-10 using while loop
+	declare @x int
+	set @x = 0
+
+	While @x<10
+	BEGIN
+		Set @x = @x+1
+		Print @x
+	End
+
+
+Ex 9 : Write a T/SQL program to print value fron 1-10 and stop the loop when value reaches to 6 using while
+ loop
+	declare @x int
+	set @x = 0
+
+	While @x<10
+	BEGIN
+		Set @x = @x+1
+		Print @x
+	End
