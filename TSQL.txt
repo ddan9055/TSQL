@@ -143,7 +143,6 @@ Selcet case @VariableName
 
 when caseValue then 'display value'
 
-
 when caseValue then 'display value'
 
 when caseValue then 'display value'
@@ -221,4 +220,26 @@ Ex 9 : Write a T/SQL program to print value fron 1-10 and stop the loop when val
 		Print @x
 	End
 
-Ex 10
+Ex 10 : Write a T/SQL program which takes the empno and increments the salary of employee on following criteria
+	1. If job is President increment with 10%
+	2. If job is Manager increment with 8%
+	3. If job is Analyst increment with 6%
+	4. If job is any thing other increment with 5%
+
+declare @empno int,@job varchar(50)
+Set @empno = 7839
+
+select @job = job  from emp where empno=@empno
+
+If @job = 'President'
+	Update emp set sal = sal + sal * 0.1 where empno = @empno
+
+Else If @job = 'Manager'
+	Update emp set sal = sal + sal * 0.08 where empno = @empno
+
+Else If @job = 'Analyst '
+	Update emp set sal = sal + sal * 0.06 where empno = @empno
+
+Else
+	Update emp set sal = sal + sal * 0.05 where empno = @empno
+
