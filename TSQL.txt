@@ -220,3 +220,5 @@ Ex 9 : Write a T/SQL program to print value fron 1-10 and stop the loop when val
 		Set @x = @x+1
 		Print @x
 	End
+
+Ex 10
