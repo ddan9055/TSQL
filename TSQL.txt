@@ -243,3 +243,119 @@ Else If @job = 'Analyst '
 Else
 	Update emp set sal = sal + sal * 0.05 where empno = @empno
 
+
+
+SUB-Programs : A sub program is a named block of code that is directly saved on server and it can be executed 
+	when and where ir is requied.We have two types of sub-programs in SQL Server
+
+	1. Stored Procedures / Procedure
+	2. Stored Functions/Functions
+
+
+1. Stored Procedures / Procedure : A Stored Procedure is a database object which contains precompiled queries.
+	Stored procedures are a block of code designed to perform a task whenever we called.
+
+Why we need Stored Procedure : Whenever we want to execute a SQL query from an application the SQL query will 
+	first parsed(i.e. Compiled) for execution where the process of parsing is time consuming bcoz parsing
+	occurs each and every time we execute the query or statement.
+	
+	To overcome the above problem we write SQL statements or queries under stored procedure and execute
+	bcoz a stored proc edure is pre compiled block of code without parsing the statements gets executed 
+	whenever the procedures are called which can increase the performance of an application. 
+
+
+# How to create Stored Procedures/Procedure (Without parameter)
+Syntax : 
+	create Procedure ProceduresName
+	As
+	Begin
+		<Statements>
+	End
+
+	Note :  Once the procedure is created it is physically saved on the server as a database Object which
+	can be called whenever we required to the user
+
+	We can call the above procedure from anywhere and from any application that is developed 
+	using JAVA or .Net language
+
+
+# How to call a Stored Procedures/Procedure
+
+Syntax : exec ProcedureName
+
+
+Ex 11. Examples on without parameters Procedures : 
+
+1. Write a simple procedure program (without parameters) to print WELCOME statement on the query window
+
+ 
+ create Procedure Test1
+ As
+ Begin
+	print 'Welcome to stored Procedure'
+ End
+
+----------------------------------------
+	How to execute
+
+	exec Test1
+
+	O/p : Welcome to stored Procedure
+
+# Passing Parameters to Procedures : If we want to pass parameters to procedure then we are using the below
+syntax
+
+Syntax : Create procedures ProcedureName
+	
+	 (Passing parameters)
+
+	 As
+
+	 Begin
+
+	    <Statements>
+    	End
+	
+
+Ex 12. Examples on parameters Procedures : 
+
+Write a program  to add the two values with parameters Procedure
+
+
+Create procedure addTwo(@a int,@b int)
+as
+begin
+declare @c int
+Set @c = @a + @b;
+Print 'Addition ='+cast(@c as varchar);
+end
+
+
+----------------------------------------
+	How to execute
+
+	exec addTwo 2,3
+
+	O/p : Addition = 5
+
+
+Ex 13. Create a procedure to display employee details of employee from emp table
+
+create procedure empSearch
+as
+begin
+select * from Emp
+end
+
+
+Ex 14. Create a procedure to accept employee id and delete the record from emp table
+
+create procedure empDel(@eid int)
+as
+begin
+delete from emp where empno = @eid
+end 
+
+
+Ex 15:  Writr a program to perform arithmetic opertions of two values with parameters procedure
+
