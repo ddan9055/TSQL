@@ -357,5 +357,107 @@ delete from emp where empno = @eid
 end 
 
 
-Ex 15:  Writr a program to perform arithmetic opertions of two values with parameters procedure
+Ex 15:  Write a program to perform arithmetic opertions of two values with parameters procedure
+
+create procedure arithmetic(@a int,@b int)
+As
+Begin
+   declare @add int,@sub int,@mult int,@div int
+
+   Set @add = @a + @b;
+   Set @sub = @a - @b;
+   Set @mult = @a * @b;
+   Set @div = @a / @b;
+
+   Print 'Addition = '+cast(@add as varchar);	
+   Print 'Sub = '+cast(@sub as varchar);
+   Print 'Multiplication = '+cast(@mult as varchar);
+   Print 'Division = '+cast(@div as varchar);
+	
+end
+
+----------------------------------------
+	How to execute
+
+	exec arithemtic 8,2
+
+	O/p : Addition = 10
+	      sub = 6
+	      Multiplication= 16
+	      Division= 4
+
+
+Ex 16. Create a procedure to accept empno and update the employee details from emp table
+
+create procedure empUpdate (@empno int,@ename varchar(max),@job varchar(max),sal int)
+As
+Begin
+  update emp set ename = @ename,job= @job,sal = @sal where empno = @empno
+End
+
+----------------------------------------
+	How to execute
+
+exec empUpdate 7788,'Rohit','SALESMAN',1500
+
+Ex 17. Create a procedure to add records in emp table
+
+create procedure empRecord(@empno int,@ename varchar(30),@job varchar(30),@mgr int,@hiredate date,@sal int,@comm int,
+	@deptno int)
+As
+Begin
+  insert into emp values(@empno,@ename,@job,@mgr,@hiredate,@sal,@comm,@deptno)
+End
+
+----------------------------------------
+	How to execute
+exec empRecord 8200,'AJIT','SALESMAN',7369,'1990-02-12',1550,200,30
+
+Ex 18 :  Write a procedure to insert records into two tables [ emp and dept table]
+
+create procedure TwoTableRecord(@empno int,@ename varchar(30),@job varchar(30),@mgr int,@hiredate date,@sal int,@comm int,
+	@deptno int,@dname varchar(50),@loc varchar(30))
+As
+Begin
+  insert into emp values(@empno,@ename,@job,@mgr,@hiredate,@sal,@comm,@deptno)
+  insert into dept values(@deptno,@dname,@loc)
+End
+
+----------------------------------------
+	How to execute
+exec TwoTableRecord 8210,'JOHN','DBA',7512,'1991-12-12',2500,410,60,'DBA','MUMBAI'
+
+
+Ex 19 : Write a procedure with default values : 
+
+Create procedure DefaultValue(@x int = 100,@y int)
+As
+Begin
+    declare @add int
+    set @add = @x + @y
+    print 'Addition = '+cast(@add as varchar)
+End
+
+
+----------------------------------------
+	How to execute
+
+1.  exec DefaultValue @x=Default,@y=200
+
+2.  exec DefaultValue @y=200
+
+
+Ex 20 : Write a Procedure which takes the empno and prints the Net Salary of the Employee
+
+create procedure Net_Sal(@empno int)
+As
+Begin
+  Declare @NetSal int,@sal int,@comm int
+  exec  NetCalculation @empno
+  select @sal = sal,@comm = comm from emp where empno = @empno
+  set @NetSal = @sal + @comm
+  Print 'Net Salary = '+cast(@NetSal as varchar)
+End
+
+
 
