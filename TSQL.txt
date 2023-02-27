@@ -141,7 +141,7 @@ Syntax :
 
 Selcet case @VariableName
 
-when caseValue then 'display value'
+when caseValue then 'display value'  
 
 when caseValue then 'display value'
 
@@ -154,8 +154,12 @@ ex 7 :
  Set @weekdays = 7
  Select Case @weekdays
  when 1 Then 'Sunday'
+	'No Work'
  when 2 Then 'Monday'
+	'Inventry checking'
+	select * from inventry
  when 3 Then 'Tuesday'
+	select * from sales
  when 4 Then 'Wednesday'
  when 5 Then 'Thursday'
  when 6 Then 'Friday'
@@ -202,10 +206,10 @@ Ex 8 : Write a T/SQL program to print value fron 1-10 using while loop
 	declare @x int
 	set @x = 0
 
-	While @x<10
+	While @x<10 
 	BEGIN
 		Set @x = @x+1
-		Print @x
+		Print @x * 10                       
 	End
 
 
@@ -459,5 +463,217 @@ Begin
   Print 'Net Salary = '+cast(@NetSal as varchar)
 End
 
+# How to drop Stored Procedure / Procedure
+
+Syntax : Drop Procedure ProcedureName
 
 
+2. Stored Functions/Functions : Function  is a block code similar to a stored procedure which is also
+used to perform an action and returns results as a value.Function can be into two types,these are
+
+	1. Scalar-Valued Function : In this case we can return a attribute datatype as an output from 
+		function.
+
+	How to create Scalar - valued function : 
+	 
+	Create function functionName (@parameter datatype[Size])
+	Returns <return attribute datatype>
+
+	As
+   	Begin
+	   Return <return attribute Name>
+	End
+
+
+	Ex 21 : Create a function to return the cube of the given value 
+		create function findCube(@x int)
+		Returns int
+		As
+		Begin
+		  return @x * @x * @x
+		End
+
+	How to Call Scalar Valued Function : 
+	Syntax : select dbo.functionName(value)
+	
+	select dbo.findCube(3)
+
+	Ex 22. Create a Function that takes an employee id and returns the salary of that employee
+
+	create function empSal(@empno int)
+	Returns int
+	As
+	Begin
+	   declare @sal int
+	   select @sal = sal from emp where empno = @empno
+	   return @sal	
+	End
+	----------------------------------------
+	How to call 
+
+	select dbo.empSal(8100)
+
+
+	2. Table-Valued Function :  In this case we can return a table as an output from the function
+
+	Syntax : 
+		create function functionName(@parameter datatype[Size])
+		Returns<Table>
+		As
+		return(return select statement>
+
+	Ex 23. Create a function that accept the employee id and returns the employee details from 
+		the employee table
+
+		create function empDetail(@empno int)
+		returns table 
+		As
+		return(select * from emp where empno = @empno)
+
+	How to call Table-valued Function
+	Syntax :  select * from functionName(value)
+
+	select * from empDetail(8012)
+
+
+	Ex 24. Create a function to get deptno and returns list of employee working in emp and dept 
+	       tables
+
+	      	create function empdata(@deptno int)
+		returns table 
+		as
+		return(select e.empno,e.ename,e.sal,d.deptno,d.dname,d.loc from 
+		emp e Inner Join dept d ON e.deptno = d.deptno where e.deptno = @deptno)
+
+
+How to drop Function
+
+Syntax : drop function functionName
+
+ex : drop function empdata
+
+
+# Triggers : A trigger is a special type of procedure that will used to provide restrict on the 
+    tables when a language[SQL] events executed.
+
+1. DML Triggers [Insert, Delete, Update ]
+
+2. DDL Triggers [Create,Alter,drop,truncate ]
+
+
+1. DML Triggers : DML Triggers execute when the user tried to modify or change data through 
+	DML language events.Those are inserting,update and delete statements on table.
+
+	DML triggers can be used to enforce business rules and data integrity.With the help of a DML 
+	Triggers we can enforce integrity which cannot be done with constraints
+
+Syntax : Create Trigger TriggerName On TableName
+	 
+	 For [Insert,Update,Delete ]
+	
+	 As
+	
+	 Begin
+      	   <Statements>
+	 End
+
+
+Ex 25: Write a Trigger that will convert the dname and Location into Upper case when the user insert 
+	lowercase.
+
+	create trigger UpperTrigger On Dept after insert
+	As
+ 	Begin
+	   declare @deptno int,@dname varchar(50),@loc varchar(50)
+	   select @deptno = deptno,@dname = dname,@loc = loc from inserted 
+	   update dept set dname = upper(@dname),loc = upper(@loc) where deptno = @deptno
+	end
+
+
+Ex 26 : Write a trigger that will restrict the operations to be performed before 9 am and after 5 pm
+	 
+
+	create trigger op_time On Emp After Insert,Update,delete
+
+	As
+
+	Begin
+	
+		declare @dt int
+			
+		set @dt = DATENAME(HH,GETDATE())
+
+		if @dt not between 9 and 16
+		
+		Begin
+                   Rollback
+		   Raiserror('Cannot perform DML Operations',15,1)	
+		End
+	End
+
+
+Ex 27: A program which will restrict the delete opertion if the job of the employee is Manager
+
+	create trigger emp_del On emp After delete
+	As
+	
+	Begin
+	  Declare @job varchar(50)
+	  select @job = job from deleted
+	  If @job = 'Manager'
+		Begin
+		 Rollback
+		 Raiserror('Cannot Delete manager from the Table',15,1)
+		End
+	End
+
+Dropping DML Triggers : 
+
+Syntax : drop Trigger TriggerName
+	
+	
+2. DDL Triggers : DDL triggers fire in response  to a DDL event like create,Alter,drop etc. 
+	A DDL Triggers is special type of procedure that executes in response to database scoped event
+
+
+Syntax : Create Trigger TriggerName ON Database After<Event type>
+
+	 As
+	
+	 Begin
+      	   <Statements>
+	 End
+
+
+Ex 27: Write a trigger which restrics dropping of table from the database
+
+create trigger cancel_drop On Database after drop_table
+As
+Begin
+	RollBack
+	Raiserror('Cannot drop table from this Database',1,1)
+End
+
+
+Ex 28. Write a trigger which restrict creating a table from the database
+
+create trigger stop_creation On Database after create_table
+As
+Begin
+	RollBack
+	Raiserror('Cannot create table under this this Database',1,1)
+End
+
+
+Ex 29. Write a trigger which restrict to alter table under the database
+
+create trigger stop_Alteration On Database after Alter_table
+As
+Begin
+	RollBack
+	Raiserror('Cannot Alter table under this Database',1,1)
+End
+
+Dropping DDL Triggers : 
+
+Syntax : drop Trigger TriggerName ON Database
