@@ -603,7 +603,7 @@ Ex 26 : Write a trigger that will restrict the operations to be performed before
 			
 		set @dt = DATENAME(HH,GETDATE())
 
-		if @dt not between 9 and 16
+		if @dt between 9 and 16
 		
 		Begin
                    Rollback
@@ -677,3 +677,170 @@ End
 Dropping DDL Triggers : 
 
 Syntax : drop Trigger TriggerName ON Database
+
+
+
+# Magic Table : SQL server allows you to define a magic table.Magic table are invisible or virtual 
+	tables.You can see them only with the help of Trigger in SQL Server.
+	
+	>> Magic tables are those tables which allow you to hold inserted,deleted and updated values
+	   during insert,delete and update DML Opertions on a table in SQL Server
+
+	>> Basically there are two types of magic table in SQL Server namely inserted and deleted
+	   Magic table update can be performd with the help of these two tables.
+
+	>>Generally we cannot see these two table,we can see only it with the help of triggers in 
+	  SQL Server
+
+
+#Inserted Magic Table :  Whenever we insert a record on that table,that record will be shown in the 
+			 INSERTED Magic Table.Now creating a trigger to see the data in inserted 
+			 Magic table
+
+Ex 28. 
+	create trigger Trigger_ForInsertMagic On Emp07 For Insert
+	As
+	Begin
+	  select * from Inserted
+	End
+
+
+#Deleted Magic table : Whenever we delete a record on that table,that record will be shown in the 
+			 DELETED Magic Table.Now creating a trigger to see the data in Deleted
+			 Magic table
+Ex 29. 
+create trigger Trigger_FordeleteMagic On Emp07 For Delete
+	As
+	Begin
+	  select * from Deleted
+	End
+
+
+# Update the record in Table :  To update the record in the Emp07 table,we use it for both virtual/
+	Magic table .Onc Shows the inserted Magic table and the other shows the deleted magic table .
+	The following trigger defines both the inserted and deleted magic table
+
+Ex 30. 
+
+create trigger Trigger_ForinserteddeleteMagic On Emp07 For Update
+	As
+	Begin
+	  select * from Inserted
+ 	  select * from Deleted
+	End
+
+
+# Exception Handling : We handle errors of a program both in programming language and as well as 
+	database also.Whereas handling an error in a programming language needs stopping abnormal 
+	termination and allowing the statements which are not related with the error to execute
+	whereas handling as error in SQL Server means stopping the execution of statements whci are 
+	related with the error.
+
+Handling error In SQL Server : From SQL Server 2005 we are provided with a structure error handling
+	Mechanism with the help of TRY and CATCH block which should be used as following.
+
+Syntax : 
+	Begin Try
+		<Statements>
+	End Try
+	Begin Catch
+		<Statements>
+	End Catch
+
+Ex 31 : Write a procedure for diving two numbers
+
+	create procedure WithoutTryDivide(@x int, @y int)
+	As
+	Begin
+	 Declare @z int
+	 Set @z = @x/@y
+	 Print 'Division ='+cast(@z as char)
+	End
+
+/******************************************/
+create procedure WithTryDivide(@x int, @y int)
+	As
+	Begin
+	 Declare @z int
+	 Begin Try
+	 Set @z = @x/@y
+	 Print 'Division ='+cast(@z as char)
+	 End Try
+	 Begin Catch
+	  Print Error_Message()
+	 End Catch
+	End
+
+
+Error_Message() : It is used to display the information about the error occurred.
+
+
+/**************************************************************************************/
+
+Cursor : Cursor is a memory location for storing database tables.cursor is a temporary work area allotted to 
+	 client at server when a SQL Statement is execute.A cursor contains information on a select statement
+	 and the rows of data accessed by it.
+
+	 This temporary work area is used to store data retrieved from database and manipulate this data.
+	 A cursor can hold morevthen one row,but can process only one row at a time.The set of rows the cursor
+	 holds is called the ResultSet
+
+There are Two Types of Cursors in T/SQL
+
+1. Implicit Cursors : These cursors will be created by SQL Server by default when select statement will 
+		      executed.Select statement will show records in the table as a set or result set
+
+2. Explicit Cursors : When user can create a memory location to store  the tables then it called as Explicit
+		      cursors.These cursors will access the records in the table record by record or one by 
+		      one only.Whenever we want to go record by record manipulation then explicit cursors will 
+		      be used.
+
+Steps to Create Cursor :
+
+1. Declaring A Cursor :  In this process we define a cursor.
+
+	Syntax : Declare CursorName Cursor for selectStatement
+
+2. Opening A Cursor : When we open a cursor it will internally execute the select statement that is associated
+	 with the cursor declartion and load the data into cursor.
+
+	Syntax : Open cursorName
+
+3. Fetching data from the Cursor : In this process we access row by row from cursor.
+
+	Syntax : Fetch first/last/next/absolute n/relative n from cursorName into variables
+
+4. Closing A Cursor : In this process,itn releases the current result set of the cursor leaving the data 
+		      structure available for reopening.
+
+	Syntax : Close CursorName
+
+5. Deallocate A Cursor : It removes the cursor reference and deallocate it by destroy the data structure.
+	Syntax  : deallocate CursorName
+
+
+@@fetch status : It is  a global variable use to check wheather cursor variable contains records or not.
+		 If record is there then the value will be zero other wise value will be -1.
+
+
+Example to work with Cursor
+
+Ex 32. Create an Explicit cursor to display all records from table
+
+	declare @dno int,dname char(20),@loc varchar(20)
+	declare c1 cursor for select * from dept
+	open c1
+	fetch next from c1 into @dno,@dname,@loc
+	while @@fetch_status = 0
+	Begin
+	  print @dno
+	  print @dname
+          print @loc
+	  fetch next from c1 into @dno,@dname,@loc
+	End
+	close c1
+	dealocate c1
+
+
+
+ 
