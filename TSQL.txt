@@ -808,7 +808,7 @@ Steps to Create Cursor :
 
 3. Fetching data from the Cursor : In this process we access row by row from cursor.
 
-	Syntax : Fetch first/last/next/absolute n/relative n from cursorName into variables
+	Syntax : Fetch first/last/next/prior/absolute n/relative n from cursorName into variables
 
 4. Closing A Cursor : In this process,itn releases the current result set of the cursor leaving the data 
 		      structure available for reopening.
@@ -840,6 +840,64 @@ Ex 32. Create an Explicit cursor to display all records from table
 	End
 	close c1
 	dealocate c1
+
+
+Ex 33. create an explicit cursor to display salaries of each employee in the table
+
+declare @empno int ,@ename varchar(20),@sal int
+declare empcursor cursor for select empno,ename,sal from emp
+open empcursor
+fetch next from empcursor into @empno,@ename,@sal
+while @@FETCH_STATUS = 0
+Begin
+	Print 'Salary of'+' '+@ename+' is '+cast(@sal as varchar)
+	fetch next from empcursor into @empno,@ename,@sal
+End
+close empcursor
+deallocate empcursor
+
+Ex 34. Write a program to increment the salaries of all the employee based on the following criteria
+	President 10%,Manager 8%,and other 5%
+
+declare @empno int,@job varchar(20)
+declare updatecursor cursor for select empno,job from emp
+open updatecursor
+fetch next from updatecursor into @empno,@job
+while @@FETCH_STATUS = 0
+Begin
+	if @job = 'President'
+		update emp set sal += sal * 0.10 where empno = @empno
+	Else if @job = 'Manager'
+		update emp set sal += sal * 0.08 where empno = @empno
+	Else 
+		update emp set sal += sal * 0.05 where empno = @empno
+
+	fetch next from updatecursor into @empno,@job
+End
+close updatecursor
+deallocate updatecursor
+
+
+
+# Forward only and Scroll Cursors : If a cursor is declare as forward only it allows you to navigate 
+only to the next records in sequential order and more over it supports only a singleton method that 
+is fetch next (one-by-one) where as scroll cursor allows you to navigate/fetch Bidirectionally that
+is top-bottom also and it supports six different fetch methods
+
+1. Fetch Next
+2. Fetch First
+3. Fetch Last
+4. Fetch Prior
+5. Fetch Absolute
+6. Fetch Relative
+
+Ex 35. Create an explicit cursor on fetching methods
+
+	declare @empno int
+	delca
+
+
+
 
 
 
